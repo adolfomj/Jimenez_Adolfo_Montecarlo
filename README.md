@@ -2,6 +2,11 @@
 S20 - Módulo 1. Actividad didáctica 2-M1
 # 🎲 Yahtzee con Montecarlo y Ley de los Grandes Números
 
+## 🎥 Video Explicativo de la Actividad
+
+> 📺 **[Haz clic aquí para ver el video de sustentación del proyecto](PEGA_AQUI_EL_ENLACE_DE_TU_VIDEO)**  
+---
+
 Proyecto de simulación estocástica del juego de Yahtzee para 2 jugadores utilizando **Muestreo de Montecarlo** (estimación de Valor Esperado, $EV$) y validación empírica de la **Ley de los Grandes Números (LGN)**.
 
 ---
