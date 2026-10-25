@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe Académico: Simulación de Yahtzee y Ley de los Grandes Números</title>
+    <style>
+        /* Estilos de Documento Universitario Clásico */
+        :root {
+            --ink: #1a202c;
+            --muted: #4a5568;
+            --accent: #1e3a8a;
+            --border-color: #cbd5e1;
+            --bg-page: #e2e8f0;
+            --bg-paper: #ffffff;
+            --bg-callout: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--ink);
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.75;
+            padding: 2.5rem 1rem;
+        }
+
+        /* Hoja tamaño Carta/A4 estilizada */
+        .paper {
+            max-width: 850px;
+            margin: 0 auto;
+            background-color: var(--bg-paper);
+            padding: 4rem 4.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+            border-top: 6px solid var(--accent);
+        }
+
+        /* Encabezado Universitario */
+        .university-header {
+            text-align: center;
+            border-bottom: 2px solid var(--ink);
+            padding-bottom: 1.75rem;
+            margin-bottom: 2.25rem;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .university-header .dept {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .university-header h1 {
+            font-size: 1.65rem;
+            color: var(--ink);
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        /* Resumen / Abstract */
+        .abstract-box {
+            background-color: var(--bg-callout);
+            border-left: 4px solid var(--accent);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
+        }
+
+        .abstract-title {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            color: var(--accent);
+            margin-bottom: 0.4rem;
+        }
+
+        /* Títulos de Secciones */
+        h2 {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 1.25rem;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.35rem;
+            margin: 2.25rem 0 1rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        h3 {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 1.05rem;
+            color: var(--ink);
+            margin: 1.5rem 0 0.6rem 0;
+        }
+
+        p {
+            margin-bottom: 1.1rem;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin: 0.75rem 0 1.25rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            text-align: justify;
+        }
+
+        /* Cajas Explicativas / Didácticas */
+        .didactic-note {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 6px;
+            padding: 1.1rem 1.35rem;
+            margin: 1.25rem 0;
+            font-size: 0.95rem;
+        }
+
+        .didactic-note strong {
+            color: var(--accent);
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        /* Figuras */
+        figure {
+            margin: 2rem 0;
+            padding: 1rem;
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        figure img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        figcaption {
+            margin-top: 0.75rem;
+            font-size: 0.88rem;
+            color: var(--muted);
+            font-style: italic;
+            text-align: left;
+            padding: 0 0.5rem;
+        }
+
+        /* Tablas Académicas (Estilo Booktabs) */
+        .tables-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .table-caption {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 0.4rem;
+            text-align: left;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 0.85rem;
+            border-top: 2px solid var(--ink);
+            border-bottom: 2px solid var(--ink);
+        }
+
+        th {
+            border-bottom: 1px solid var(--ink);
+            padding: 0.5rem 0.6rem;
+            text-align: center;
+            font-weight: 700;
+            background-color: var(--bg-callout);
+        }
+
+        td {
+            padding: 0.45rem 0.6rem;
+            text-align: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        td:first-child, th:first-child {
+            text-align: left;
+        }
+
+        tr.subtotal-row td {
+            border-top: 1px solid var(--ink);
+            font-weight: 600;
+            background-color: #f8fafc;
+        }
+
+        tr.final-row td {
+            border-top: 1px solid var(--ink);
+            font-weight: 700;
+            background-color: #eff6ff;
+            color: var(--accent);
+        }
+
+        /* Pie de Colaboración */
+        .credits-section {
+            margin-top: 3rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        @media (max-width: 768px) {
+            .paper {
+                padding: 2rem 1.5rem;
+            }
+            .tables-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+            .paper {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+                border-top: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<article class="paper">
+
+    <!-- ENCABEZADO ACADÉMICO -->
+    <header class="university-header">
+        <div class="dept">Programa de Desarrollo de Software &bull; Simulación y Probabilidad</div>
+        <h1>Simulación del Juego Yahtzee con el Método de Montecarlo y Demostración de la Ley de los Grandes Números</h1>
+        <div class="meta-info">
+            <span><strong>Autor:</strong> Adolfo Jiménez</span>
+            <span><strong>Metodología:</strong> Toma de Decisiones Estocástica</span>
+            <span><strong>Octubre de 2026</strong></span>
+        </div>
+    </header>
+
+    <!-- RESUMEN EJECUTIVO -->
+    <div class="abstract-box">
+        <div class="abstract-title">Resumen de la Actividad</div>
+        <p style="margin-bottom: 0;">
+            En este trabajo se analiza y mejora una simulación por computadora del juego de dados <strong>Yahtzee</strong> para dos jugadores. A partir del código original proporcionado en clase, se realizaron ajustes para cumplir con todas las reglas oficiales del juego y hacer que el programa tome decisiones más rápido mediante el <strong>Método de Montecarlo</strong>. Finalmente, se utilizan los datos reales de los dados lanzados para explicar y demostrar visualmente cómo funciona la <strong>Ley de los Grandes Números (LGN)</strong> tanto en una partida corta como en la repetición de decenas de partidas.
+        </p>
+    </div>
+
+    <!-- 1. INTRODUCCIÓN Y MECÁNICA DEL JUEGO -->
+    <section>
+        <h2>1. Introducción: ¿Cómo funciona el juego y cómo decide el programa?</h2>
+        <p>
+            <strong>Yahtzee</strong> es un juego de estrategia y azar con 5 dados que consta de <strong>13 rondas</strong>. En cada turno, el jugador puede lanzar los dados hasta 3 veces: hace un primer tiro con los 5 dados y, en los dos tiros siguientes, decide qué dados guardar en la mesa y cuáles volver a lanzar buscando armar combinaciones ganadoras (como escaleras, tríos, póker o cinco dados iguales). Al terminar su turno, debe anotar su puntaje en una de las 13 casillas de la tarjeta; si no logra armar una jugada válida, está obligado a anotarse un cero en alguna casilla disponible.
+        </p>
+        <p>
+            Para que el programa juegue de forma inteligente sin intervención humana, utiliza el <strong>Método de Montecarlo</strong>. Antes de decidir qué dados guardar, el computador ensaya mentalmente las 32 formas posibles de retener sus 5 dados. Para cada opción, simula cientos de tiradas futuras al azar, calcula el promedio de puntos que obtendría y elige la combinación que le ofrece la mayor ganancia esperada.
+        </p>
+    </section>
+
+    <!-- 2. MODIFICACIONES AL CÓDIGO BASE -->
+    <section>
+        <h2>2. Mejoras Aplicadas al Código Original</h2>
+        <p>
+            Tomando como base el código suministrado por el docente, nuestro trabajo consistió en perfeccionar dos aspectos fundamentales: asegurar que las reglas del juego estuvieran completas y evitar que el programa hiciera cálculos innecesarios.
+        </p>
+
+        <h3>2.1. Ajustes en las Reglas del Juego</h3>
+        <ul>
+            <li><strong>Bono de +35 puntos en la sección superior:</strong> En las reglas oficiales de Yahtzee, si un jugador logra sumar 63 puntos o más entre las casillas de números simples (del 1 al 6), recibe un premio adicional de 35 puntos. Se añadió esta regla al marcador automático.</li>
+            <li><strong>Comodín en <em>Full House</em>:</strong> Se ajustó el evaluador para que una jugada de cinco dados iguales (<em>Yahtzee</em>) también sea aceptada como un <em>Full House</em> válido de 25 puntos cuando el jugador lo necesite.</li>
+            <li><strong>Conteo real de dados lanzados:</strong> En el código inicial se sumaban siempre 5 dados por intento, incluso si el jugador había guardado algunos en la mesa. Se corrigió el contador para registrar únicamente los dados que realmente vuelven a rodar, logrando una estadística limpia.</li>
+        </ul>
+
+        <h3>2.2. Optimización de Velocidad y Prueba de Rendimiento</h3>
+        <p>
+            En la versión original, cuando el programa evaluaba la opción de "guardar los 5 dados en la mesa", aun así ejecutaba cientos de simulaciones repetidas aunque ningún dado fuera a cambiar. Modificamos el algoritmo para que, en esos casos donde los dados ya están fijos o no quedan más tiros, calcule el puntaje una sola vez de forma directa. Además, se precalcularon las opciones de retención al inicio del programa y se evitó duplicar listas en memoria en cada intento.
+        </p>
+
+        <figure>
+            <img src="image_32b59e.png" alt="Comparativa de rendimiento entre el código original y el optimizado">
+            <figcaption>
+                <strong>Figura 1. Prueba de rendimiento independiente:</strong> Se pusieron a competir el motor de decisión original (línea roja) y el optimizado (línea verde) resolviendo las mismas manos de prueba. Aunque en muestras muy pequeñas ($N=100$, apenas 0.05 segundos) los tiempos pueden empatar por fluctuaciones mínimas del procesador, a medida que la simulación se vuelve más exigente ($N=200$ a $400$) la ventaja del código optimizado se hace cada vez más amplia, logrando un ahorro sostenido de entre un <strong>12.8% y un 15.9% del tiempo de cómputo</strong>.
+            </figcaption>
+        </figure>
+    </section>
+
+    <!-- 3. ANÁLISIS DE LA PARTIDA Y LEY DE LOS GRANDES NÚMEROS -->
+    <section>
+        <h2>3. Resultados de la Simulación y Explicación de las Gráficas</h2>
+        <p>
+            Al ejecutar el código optimizado para una partida completa entre el Jugador 1 y el Jugador 2, y posteriormente ampliar la prueba a un lote de 60 partidas seguidas, se obtuvo el panel visual que se presenta en la <strong>Figura 2</strong>:
+        </p>
+
+        <figure>
+            <img src="analisis_lgn_yahtzee (1).png" alt="Panel de resultados de la partida de Yahtzee y convergencia LGN">
+            <figcaption>
+                <strong>Figura 2. Panel general de resultados:</strong> Arriba se muestra la puntuación final de ambos jugadores en las 13 categorías. Abajo a la izquierda (Opción A) se observa cómo varían los porcentajes de las caras del dado tiro a tiro en una sola partida. Abajo a la derecha (Opción B) se muestra la nivelación casi perfecta tras acumular 19,703 lanzamientos.
+            </figcaption>
+        </figure>
+
+        <h3>3.1. ¿Cómo interpretar el marcador final de la partida?</h3>
+        <p>
+            El gráfico superior de barras y la <strong>Tabla 1</strong> resumen el duelo estratégico entre ambos jugadores a lo largo de las 13 rondas:
+        </p>
+        <ul>
+            <li><strong>Victoria del Jugador 2 (135 pts vs 91 pts):</strong> El Jugador 2 ganó con una ventaja de 44 puntos. La diferencia clave estuvo en la categoría <code>largeStraight</code> (Escalera Mayor), donde el Jugador 2 consiguió los <strong>40 puntos</strong> máximos mientras que el Jugador 1 no logró completarla en sus tres tiros y tuvo que anotarse 0 puntos.</li>
+            <li><strong>Mejores sumas en números altos:</strong> El Jugador 2 también sacó ventaja en las casillas de cuatros (<code>fours</code>: 8 vs 4 pts) y cincos (<code>fives</code>: 10 vs 5 pts), logrando un subtotal superior de 31 puntos frente a 23 del Jugador 1.</li>
+            <li><strong>Jugadas empatadas y casillas en cero:</strong> Ambos jugadores lograron armar la escalera pequeña (<code>smallStraight</code>: 30 pts cada uno) y el trío (<code>threeOfKind</code>: 17 y 16 pts). Ninguno logró alcanzar los 63 puntos en la parte superior para ganar el bono de +35 puntos, y ambos se vieron obligados a tachar en cero categorías difíciles como <code>yahtzee</code>, <code>fourOfKind</code> y <code>fullHouse</code>.</li>
+        </ul>
+
+        <!-- TABLAS DE DATOS EXTRAÍDOS -->
+        <div class="tables-container">
+            <div>
+                <div class="table-caption">Tabla 1. Puntuaciones por Categoría (1 Partida)</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Categoría del Juego</th>
+                            <th>Jugador 1</th>
+                            <th>Jugador 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Unos (ones)</td><td>0</td><td>1</td></tr>
+                        <tr><td>Doses (twos)</td><td>2</td><td>0</td></tr>
+                        <tr><td>Treses (threes)</td><td>6</td><td>6</td></tr>
+                        <tr><td>Cuatros (fours)</td><td>4</td><td>8</td></tr>
+                        <tr><td>Cincos (fives)</td><td>5</td><td>10</td></tr>
+                        <tr><td>Seises (sixes)</td><td>6</td><td>6</td></tr>
+                        <tr><td>Trío (threeOfKind)</td><td>17</td><td>16</td></tr>
+                        <tr><td>Póker (fourOfKind)</td><td>0</td><td>0</td></tr>
+                        <tr><td>Full House</td><td>0</td><td>0</td></tr>
+                        <tr><td>Escalera Pequeña (smallStraight)</td><td>30</td><td>30</td></tr>
+                        <tr><td>Escalera Mayor (largeStraight)</td><td>0</td><td>40</td></tr>
+                        <tr><td>Yahtzee (5 iguales)</td><td>0</td><td>0</td></tr>
+                        <tr><td>Libre (chance)</td><td>21</td><td>18</td></tr>
+                        <tr class="subtotal-row"><td>Subtotal Sección Superior</td><td>23</td><td>31</td></tr>
+                        <tr class="subtotal-row"><td>Bono Superior (+35 pts)</td><td>0</td><td>0</td></tr>
+                        <tr class="final-row"><td>PUNTAJE TOTAL FINAL</td><td>91</td><td>135</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <div class="table-caption">Tabla 2. Frecuencia de Caras del Dado (LGN)</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cara</th>
+                            <th>Veces (1 Part.)</th>
+                            <th>% en 1 Partida (323 tiros)</th>
+                            <th>Error (1 Part.)</th>
+                            <th>% en 60 Partidas (19,703 tiros)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Cara 1</td><td>49</td><td>15.17%</td><td>1.50%</td><td>16.32%</td></tr>
+                        <tr><td>Cara 2</td><td>55</td><td>17.03%</td><td>0.36%</td><td>16.53%</td></tr>
+                        <tr><td>Cara 3</td><td>52</td><td>16.10%</td><td>0.57%</td><td>16.56%</td></tr>
+                        <tr><td>Cara 4</td><td>49</td><td>15.17%</td><td>1.50%</td><td>17.01%</td></tr>
+                        <tr><td>Cara 5</td><td>58</td><td>17.96%</td><td>1.29%</td><td>16.21%</td></tr>
+                        <tr><td>Cara 6</td><td>60</td><td>18.58%</td><td>1.91%</td><td>17.36%</td></tr>
+                        <tr class="subtotal-row">
+                            <td>Total / Promedio</td>
+                            <td>323 dados</td>
+                            <td>100%</td>
+                            <td>1.19%</td>
+                            <td>Error: 0.35%</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="didactic-note" style="margin-top: 1rem;">
+                    <strong>¿Por qué se lanzaron 323 dados en una sola partida?</strong><br>
+                    En una partida hay 26 turnos en total (13 de cada jugador). En cada turno se tiran primero los 5 dados y luego se hacen hasta 2 relanzamientos con los dados que no sirvieron. Al sumar todos los dados que rodaron turno tras turno, se acumularon exactamente <strong>323 tiros individuales</strong> (un promedio de 12.4 dados lanzados por turno).
+                </div>
+            </div>
+        </div>
+
+        <h3>3.2. Demostración de la Ley de los Grandes Números (Opción A vs. Opción B)</h3>
+        <p>
+            Un dado normal tiene 6 caras con las mismas posibilidades de salir, lo que significa que la probabilidad teórica ideal de cada número es de <strong>1 entre 6 (16.67%)</strong>. La <strong>Ley de los Grandes Números</strong> afirma que, si lanzamos el dado pocas veces, los porcentajes pueden verse desordenados por simple suerte; pero a medida que hacemos muchos más lanzamientos, el porcentaje real de cada cara se acercará inevitablemente a ese 16.67%.
+        </p>
+        <p>
+            En nuestro experimento demostramos este principio mediante las dos gráficas inferiores de la <strong>Figura 2</strong>:
+        </p>
+        <ol>
+            <li>
+                <strong>Opción A: ¿Qué pasa mientras avanza una sola partida? (323 dados):</strong>
+                En el gráfico inferior izquierdo se ve que, durante los primeros 50 tiros, las líneas de colores dan saltos muy bruscos (algunas suben al 35% y otras bajan al 5%). Esto sucede porque <strong>al principio no existe un historial acumulado</strong>: cuando llevas apenas 5 dados lanzados, un solo resultado cambia el porcentaje drásticamente. Sin embargo, cuando el juego avanza hacia los 200 y 323 dados lanzados, ya existe un historial grande donde las rachas de buena o mala suerte se compensan entre sí. Por eso las líneas dejan de saltar, se aplanan y se juntan alrededor de la línea punteada del 16.67% (terminando con un error promedio de apenas <strong>1.19%</strong>).
+            </li>
+            <li>
+                <strong>Opción B: ¿Qué pasa al acumular 60 partidas? (19,703 dados):</strong>
+                En el gráfico inferior derecho multiplicamos la muestra hasta alcanzar casi veinte mil dados lanzados. Con un historial tan grande, el azar individual pierde fuerza por completo: las seis barras azules quedan casi perfectamente niveladas sobre la línea roja teórica del 16.67% (entre 16.21% y 17.36%), bajando el margen de error promedio a tan solo un <strong>0.35%</strong>.
+            </li>
+        </ol>
+    </section>
+
+    <!-- 4. CONCLUSIONES -->
+    <section>
+        <h2>4. Conclusiones</h2>
+        <ul>
+            <li><strong>Utilidad del Método de Montecarlo:</strong> Simular jugadas futuras permitió que ambos jugadores tomaran decisiones lógicas en cada turno, priorizando combinaciones de alto valor como las escaleras y asegurando puntajes competitivos (135 y 91 puntos).</li>
+            <li><strong>Valor de la optimización en cargas altas:</strong> Evitar simulaciones innecesarias y optimizar el uso de memoria demostró ser especialmente útil a medida que aumenta la exigencia del cálculo, reduciendo el tiempo de espera hasta en un <strong>15.9%</strong> en el nivel máximo de prueba ($N=400$) sin alterar las reglas ni la justicia del juego.</li>
+            <li><strong>Comprobación clara de la probabilidad:</strong> Se demostró visualmente que la variabilidad inicial se debe a la falta de historial en muestras pequeñas, y que al acumular suficientes lanzamientos (de 323 a 19,703 dados) la realidad empírica coincide con la teoría matemática del 16.67%.</li>
+        </ul>
+    </section>
+
+    <!-- CRÉDITOS DE COLABORACIÓN -->
+    <footer class="credits-section">
+        <strong>Nota de Colaboración y Desarrollo:</strong> A partir del código base original suministrado por el docente de la asignatura, el proceso de corrección de reglas de Yahtzee, la optimización de velocidad del algoritmo de Montecarlo, la creación de las gráficas comparativas para la Ley de los Grandes Números y la redacción estructurada del presente informe universitario se realizaron con la asistencia técnica y colaboración interactiva de <strong>Gemini (Google AI)</strong>.
+    </footer>
+
+</article>
+
+</body>
+</html>
